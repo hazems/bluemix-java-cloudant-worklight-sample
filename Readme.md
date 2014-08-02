@@ -1,3 +1,3 @@
-(Java EE on WAS Liberty + Cloudant) over Bluemix End-to-end Working sample
+JAX RS + Cloudant in Bluemix as a service and Worklight as a client 
 ===
-This is a sample Bluemix Java EE Project that accesses Cloudant DB in Bluemix server.
+This is an end-to-end sample which contains a Bluemix Java EE Project that accesses Cloudant DB, and a Worklight project as a client for the Bluemix service.
