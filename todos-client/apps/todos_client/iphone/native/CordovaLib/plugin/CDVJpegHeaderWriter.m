@@ -6,9 +6,9 @@
  to you under the Apache License, Version 2.0 (the
  "License"); you may not use this file except in compliance
  with the License.  You may obtain a copy of the License at
-
+ 
  http://www.apache.org/licenses/LICENSE-2.0
-
+ 
  Unless required by applicable law or agreed to in writing,
  software distributed under the License is distributed on an
  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -21,11 +21,11 @@
 #include "CDVExif.h"
 
 /* macros for tag info shorthand:
-   tagno        : tag number
-   typecode     : data type
-   components   : number of components
-   appendString (TAGINF_W_APPEND only) : string to append to data
-      Exif date data format include an extra 0x00 to the end of the data
+ tagno        : tag number
+ typecode     : data type
+ components   : number of components
+ appendString (TAGINF_W_APPEND only) : string to append to data
+ Exif date data format include an extra 0x00 to the end of the data
  */
 #define TAGINF(tagno, typecode, components) [NSArray arrayWithObjects: tagno, typecode, components, nil]
 #define TAGINF_W_APPEND(tagno, typecode, components, appendString) [NSArray arrayWithObjects: tagno, typecode, components, appendString, nil]
@@ -40,35 +40,35 @@ const uint mTiffLength = 0x2a; // after byte align bits, next to bits are 0x002a
 
 @implementation CDVJpegHeaderWriter
 
-- (id) init {    
+- (id) init {
     self = [super init];
     // supported tags for exif IFD
     IFD0TagFormatDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                  //      TAGINF(@"010e", [NSNumber numberWithInt:EDT_ASCII_STRING], @0), @"ImageDescription",
-                        TAGINF_W_APPEND(@"0132", [NSNumber numberWithInt:EDT_ASCII_STRING], @20, @"00"), @"DateTime",
-                        TAGINF(@"010f", [NSNumber numberWithInt:EDT_ASCII_STRING], @0), @"Make",
-                        TAGINF(@"0110", [NSNumber numberWithInt:EDT_ASCII_STRING], @0), @"Model",
-                        TAGINF(@"0131", [NSNumber numberWithInt:EDT_ASCII_STRING], @0), @"Software",
-                        TAGINF(@"011a", [NSNumber numberWithInt:EDT_URATIONAL], @1), @"XResolution",
-                        TAGINF(@"011b", [NSNumber numberWithInt:EDT_URATIONAL], @1), @"YResolution",
-                        // currently supplied outside of Exif data block by UIImagePickerControllerMediaMetadata, this is set manually in CDVCamera.m
-    /*                    TAGINF(@"0112", [NSNumber numberWithInt:EDT_USHORT], @1), @"Orientation",
-                       
-                        // rest of the tags are supported by exif spec, but are not specified by UIImagePickerControllerMediaMedadata
-                        // should camera hardware supply these values in future versions, or if they can be derived, ImageHeaderWriter will include them gracefully
-                        TAGINF(@"0128", [NSNumber numberWithInt:EDT_USHORT], @1), @"ResolutionUnit",
-                        TAGINF(@"013e", [NSNumber numberWithInt:EDT_URATIONAL], @2), @"WhitePoint",
-                        TAGINF(@"013f", [NSNumber numberWithInt:EDT_URATIONAL], @6), @"PrimaryChromaticities",
-                        TAGINF(@"0211", [NSNumber numberWithInt:EDT_URATIONAL], @3), @"YCbCrCoefficients",
-                        TAGINF(@"0213", [NSNumber numberWithInt:EDT_USHORT], @1), @"YCbCrPositioning",
-                        TAGINF(@"0214", [NSNumber numberWithInt:EDT_URATIONAL], @6), @"ReferenceBlackWhite",
-                        TAGINF(@"8298", [NSNumber numberWithInt:EDT_URATIONAL], @0), @"Copyright",
-                         
-                        // offset to exif subifd, we determine this dynamically based on the size of the main exif IFD
-                        TAGINF(@"8769", [NSNumber numberWithInt:EDT_ULONG], @1), @"ExifOffset",*/
-                        nil];
-
-
+                         //      TAGINF(@"010e", [NSNumber numberWithInt:EDT_ASCII_STRING], @0), @"ImageDescription",
+                         TAGINF_W_APPEND(@"0132", [NSNumber numberWithInt:EDT_ASCII_STRING], @20, @"00"), @"DateTime",
+                         TAGINF(@"010f", [NSNumber numberWithInt:EDT_ASCII_STRING], @0), @"Make",
+                         TAGINF(@"0110", [NSNumber numberWithInt:EDT_ASCII_STRING], @0), @"Model",
+                         TAGINF(@"0131", [NSNumber numberWithInt:EDT_ASCII_STRING], @0), @"Software",
+                         TAGINF(@"011a", [NSNumber numberWithInt:EDT_URATIONAL], @1), @"XResolution",
+                         TAGINF(@"011b", [NSNumber numberWithInt:EDT_URATIONAL], @1), @"YResolution",
+                         // currently supplied outside of Exif data block by UIImagePickerControllerMediaMetadata, this is set manually in CDVCamera.m
+                         /*                    TAGINF(@"0112", [NSNumber numberWithInt:EDT_USHORT], @1), @"Orientation",
+                          
+                          // rest of the tags are supported by exif spec, but are not specified by UIImagePickerControllerMediaMedadata
+                          // should camera hardware supply these values in future versions, or if they can be derived, ImageHeaderWriter will include them gracefully
+                          TAGINF(@"0128", [NSNumber numberWithInt:EDT_USHORT], @1), @"ResolutionUnit",
+                          TAGINF(@"013e", [NSNumber numberWithInt:EDT_URATIONAL], @2), @"WhitePoint",
+                          TAGINF(@"013f", [NSNumber numberWithInt:EDT_URATIONAL], @6), @"PrimaryChromaticities",
+                          TAGINF(@"0211", [NSNumber numberWithInt:EDT_URATIONAL], @3), @"YCbCrCoefficients",
+                          TAGINF(@"0213", [NSNumber numberWithInt:EDT_USHORT], @1), @"YCbCrPositioning",
+                          TAGINF(@"0214", [NSNumber numberWithInt:EDT_URATIONAL], @6), @"ReferenceBlackWhite",
+                          TAGINF(@"8298", [NSNumber numberWithInt:EDT_URATIONAL], @0), @"Copyright",
+                          
+                          // offset to exif subifd, we determine this dynamically based on the size of the main exif IFD
+                          TAGINF(@"8769", [NSNumber numberWithInt:EDT_ULONG], @1), @"ExifOffset",*/
+                         nil];
+    
+    
     // supported tages for exif subIFD
     SubIFDTagFormatDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                            //TAGINF(@"9000", [NSNumber numberWithInt:], @), @"ExifVersion",
@@ -179,24 +179,24 @@ const uint mTiffLength = 0x2a; // after byte align bits, next to bits are 0x002a
     
     //data labeled as TIFF in UIImagePickerControllerMediaMetaData is part of the EXIF IFD0 portion of APP1
     exifIFD = [self createExifIFDFromDict: [datadict objectForKey:@"{TIFF}"] withFormatDict: IFD0TagFormatDict isIFD0:YES currentDataOffset:&currentDataOffset];
-
+    
     //data labeled as EXIF in UIImagePickerControllerMediaMetaData is part of the EXIF Sub IFD portion of APP1
     subExifIFD = [self createExifIFDFromDict: [datadict objectForKey:@"{Exif}"] withFormatDict: SubIFDTagFormatDict isIFD0:NO currentDataOffset:&currentDataOffset];
     /*
-    NSLog(@"SUB EXIF IFD %@  WITH SIZE: %d",exifIFD,[exifIFD length]);
-    
-    NSLog(@"SUB EXIF IFD %@  WITH SIZE: %d",subExifIFD,[subExifIFD length]);
-    */
+     NSLog(@"SUB EXIF IFD %@  WITH SIZE: %d",exifIFD,[exifIFD length]);
+     
+     NSLog(@"SUB EXIF IFD %@  WITH SIZE: %d",subExifIFD,[subExifIFD length]);
+     */
     // construct the complete app1 data block
     app1 = [[NSMutableString alloc] initWithFormat: @"%@%04x%@%@%@%@%@",
             app1marker,
-            16 + ([exifIFD length]/2) + ([subExifIFD length]/2) /*16+[exifIFD length]/2*/,
+            (unsigned int)(16 + ([exifIFD length]/2) + ([subExifIFD length]/2)) /*16+[exifIFD length]/2*/,
             exifmarker,
             tiffheader,
             ifd0offset,
             exifIFD,
             subExifIFD];
-     
+    
     return app1;
 }
 
@@ -209,7 +209,7 @@ const uint mTiffLength = 0x2a; // after byte align bits, next to bits are 0x002a
     NSArray * knownkeys = [formatdict  allKeys]; // only keys in knowkeys are considered for entry in this IFD
     NSMutableArray * ifdblock = [[NSMutableArray alloc] initWithCapacity: [datadict count]]; // all ifd entries
     NSMutableArray * ifddatablock = [[NSMutableArray alloc] initWithCapacity: [datadict count]]; // data block entries
- //   ifd0flag = NO; // ifd0 requires a special flag and has offset to next ifd appended to end
+    //   ifd0flag = NO; // ifd0 requires a special flag and has offset to next ifd appended to end
     
     // iterate through known provided data keys
     for (int i = 0; i < [datakeys count]; i++) {
@@ -219,10 +219,10 @@ const uint mTiffLength = 0x2a; // after byte align bits, next to bits are 0x002a
             // create new IFD entry
             NSString * entry = [self  createIFDElement: key
                                             withFormat: [formatdict objectForKey:key]
-                                      withElementData: [datadict objectForKey:key]];
+                                       withElementData: [datadict objectForKey:key]];
             // create the IFD entry's data block
             NSString * data = [self createIFDElementDataWithFormat: [formatdict objectForKey:key]
-                                                   withData: [datadict objectForKey:key]];
+                                                          withData: [datadict objectForKey:key]];
             if (entry) {
                 [ifdblock addObject:entry];
                 if(!data) {
@@ -259,19 +259,19 @@ const uint mTiffLength = 0x2a; // after byte align bits, next to bits are 0x002a
             [dbstr appendFormat: @"%@", data];
             addr+= [data length] / 2;
             /*
-            NSLog(@"=====data-length[%i]=======",[data length]);
-            NSLog(@"addr-offset[%i]",addr);
-            NSLog(@"entry[%@]",entry);
-            NSLog(@"data[%@]",data);
+             NSLog(@"=====data-length[%i]=======",[data length]);
+             NSLog(@"addr-offset[%i]",addr);
+             NSLog(@"entry[%@]",entry);
+             NSLog(@"data[%@]",data);
              */
         }
     }
     
     // calculate IFD0 terminal offset tags, currently ExifSubIFD
-    int entrycount = [ifdblock count];
+    unsigned int entrycount = (unsigned int)[ifdblock count];
     if (ifd0flag) {
         // 18 accounts for 8769's width + offset to next ifd, 8 accounts for start of header
-        NSNumber * offset = [NSNumber numberWithInt:[exifstr length] / 2 + [dbstr length] / 2 + 18+8];
+        NSNumber * offset = [NSNumber numberWithUnsignedInteger:[exifstr length] / 2 + [dbstr length] / 2 + 18+8];
         
         [self appendExifOffsetTagTo: exifstr
                         withOffset : offset];
@@ -293,27 +293,27 @@ const uint mTiffLength = 0x2a; // after byte align bits, next to bits are 0x002a
         NSNumber * dataformat = [formtemplate objectAtIndex:1];
         NSNumber * components = [formtemplate objectAtIndex:2];
         if([components intValue] == 0) {
-            components = [NSNumber numberWithInt: [data length] * DataTypeToWidth[[dataformat intValue]-1]];            
+            components = [NSNumber numberWithUnsignedInteger:[data length] * DataTypeToWidth[[dataformat intValue]-1]];
         }
-
+        
         return [[NSString alloc] initWithFormat: @"%@%@%08x",
-                                                [formtemplate objectAtIndex:0], // the field code
-                                                [self formatNumberWithLeadingZeroes: dataformat withPlaces: @4], // the data type code
-                                                [components intValue]]; // number of components
+                [formtemplate objectAtIndex:0], // the field code
+                [self formatNumberWithLeadingZeroes: dataformat withPlaces: @4], // the data type code
+                [components intValue]]; // number of components
     }
     return NULL;
 }
 
 /**
  * appends exif IFD0 tag 8769 "ExifOffset" to the string provided
- * (NSMutableString*) str - string you wish to append the 8769 tag to: APP1 or IFD0 hex data string 
+ * (NSMutableString*) str - string you wish to append the 8769 tag to: APP1 or IFD0 hex data string
  *  //  TAGINF(@"8769", [NSNumber numberWithInt:EDT_ULONG], @1), @"ExifOffset",
  */
 - (void) appendExifOffsetTagTo: (NSMutableString*) str withOffset : (NSNumber*) offset {
     NSArray * format = TAGINF(@"8769", [NSNumber numberWithInt:EDT_ULONG], @1);
     
     NSString * entry = [self  createIFDElement: @"ExifOffset"
-                                withFormat: format
+                                    withFormat: format
                                withElementData: [offset stringValue]];
     
     NSString * data = [self createIFDElementDataWithFormat: format
@@ -344,7 +344,7 @@ const uint mTiffLength = 0x2a; // after byte align bits, next to bits are 0x002a
                 [datastr appendString:[dataformat objectAtIndex:3]];
             }
             if ([datastr length] < 8) {
-                NSString * format = [NSString stringWithFormat:@"%%0%dd", 8 - [datastr length]];
+                NSString * format = [NSString stringWithFormat:@"%%0%dd", (int)(8 - [datastr length])];
                 [datastr appendFormat:format,0];
             }
             return datastr;
@@ -392,7 +392,7 @@ const uint mTiffLength = 0x2a; // after byte align bits, next to bits are 0x002a
 }
 
 // format number as string with leading 0's
-- (NSString*) formatNumberWithLeadingZeroes: (NSNumber *) numb withPlaces: (NSNumber *) places { 
+- (NSString*) formatNumberWithLeadingZeroes: (NSNumber *) numb withPlaces: (NSNumber *) places {
     NSNumberFormatter * formatter = [[NSNumberFormatter alloc] init];
     NSString *formatstr = [@"" stringByPaddingToLength:[places unsignedIntegerValue] withString:@"0" startingAtIndex:0];
     [formatter setPositiveFormat:formatstr];
@@ -414,13 +414,13 @@ const uint mTiffLength = 0x2a; // after byte align bits, next to bits are 0x002a
     [self expandContinuedFraction: fractionlist
               withResultNumerator: numerator
             withResultDenominator: denominator];
-
+    
 }
 
 // approximate a decimal with an unsigned rational by method of continued fraction
 - (NSString*) decimalToUnsignedRational: (NSNumber *) numb
-                          withResultNumerator: (NSNumber**) numerator
-                        withResultDenominator: (NSNumber**) denominator {
+                    withResultNumerator: (NSNumber**) numerator
+                  withResultDenominator: (NSNumber**) denominator {
     NSMutableArray * fractionlist = [[NSMutableArray alloc] initWithCapacity:8];
     
     // generate partial fraction list
@@ -449,7 +449,7 @@ const uint mTiffLength = 0x2a; // after byte align bits, next to bits are 0x002a
     // 2. calculate reciprocal of remainder
     if (!remainder) return; // early exit, exact fraction found, avoids recip/0
     double recip = 1 / remainder;
-
+    
     // 3. exit condition
     if ([fractionlist count] > horizon) {
         return;
@@ -462,9 +462,9 @@ const uint mTiffLength = 0x2a; // after byte align bits, next to bits are 0x002a
 
 // expand continued fraction list, creating a single level rational approximation
 -(void) expandContinuedFraction: (NSArray*) fractionlist
-                  withResultNumerator: (NSNumber**) numerator
-                withResultDenominator: (NSNumber**) denominator {
-    int i = 0;
+            withResultNumerator: (NSNumber**) numerator
+          withResultDenominator: (NSNumber**) denominator {
+    NSUInteger i = 0;
     int den = 0;
     int num = 0;
     if ([fractionlist count] == 1) {

@@ -33,7 +33,7 @@
         <key>Key</key>
         <string>serverURL</string>
         <key>DefaultValue</key>
-        <string>http://9.167.228.75:9080/todos-client/</string>
+        <string>http://192.168.1.3:10080/todos-client/</string>
         <key>KeyboardType</key>
         <string>Alphabet</string>
       </dict>
